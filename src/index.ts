@@ -1,8 +1,8 @@
+// src/index.ts
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
-import serverless from "serverless-http";
 
 import authRouter from "./routes/auth";
 import eventsRouter from "./routes/events";
@@ -29,7 +29,12 @@ app.use("/users", userRouter);
 app.use("/uploads", uploadsRouter);
 app.use("/registrations", registrationsRouter);
 
-// ❌ Remove app.listen (not needed on Vercel)
+// 👉 Local development only (ignored on Vercel)
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
 
-// ✅ Export serverless handler
-export default serverless(app);
+export default app;
