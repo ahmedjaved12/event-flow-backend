@@ -5,7 +5,8 @@
       "src": "api/index.ts",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["prisma/schema.prisma"]
+        "includeFiles": ["prisma/schema.prisma"],
+        "maxDuration": 30
       }
     },
     {
@@ -23,10 +24,5 @@
       "dest": "api/index.ts"
     }
   ],
-  "installCommand": "npm install && npx prisma generate",
-  "functions": {
-    "api/index.ts": {
-      "maxDuration": 30
-    }
-  }
+  "installCommand": "npm install && npx prisma generate"
 }
