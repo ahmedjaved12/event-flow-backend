@@ -32,4 +32,4 @@ app.use("/registrations", registrationsRouter);
 // ❌ Remove app.listen (not needed on Vercel)
 
 // ✅ Export serverless handler
-export const handler = serverless(app);
+export default serverless(app);
