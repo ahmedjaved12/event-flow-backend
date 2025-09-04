@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
+import serverless from "serverless-http";
 
 import authRouter from "./routes/auth";
 import eventsRouter from "./routes/events";
@@ -28,8 +29,7 @@ app.use("/users", userRouter);
 app.use("/uploads", uploadsRouter);
 app.use("/registrations", registrationsRouter);
 
-/*const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`);
-});
-*/
+// ❌ Remove app.listen (not needed on Vercel)
+
+// ✅ Export serverless handler
+export const handler = serverless(app);
