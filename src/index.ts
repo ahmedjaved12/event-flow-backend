@@ -15,7 +15,28 @@ import registrationsRouter from "./routes/registrations";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+// ✅ Allowed origins (update if you change frontend URL)
+const allowedOrigins = [
+  "https://event-flow-frontend-beige.vercel.app", // deployed frontend
+  "http://localhost:3000", // local dev
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.use(express.json());
 
 // ✅ Handle file serving
