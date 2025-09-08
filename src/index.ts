@@ -18,14 +18,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ✅ Handle file serving for both environments without adding new routes
+// ✅ Handle file serving
 if (process.env.NODE_ENV === "production") {
-  // In production: serve files from /tmp/uploads
-  app.use("/uploads", (req, res, next) => {
+  // In production (Vercel): serve files from /tmp/uploads
+  app.use("/uploads", (req, res) => {
     const filePath = path.join("/tmp/uploads", req.path);
 
     if (fs.existsSync(filePath)) {
-      // Set appropriate content type
       const ext = path.extname(req.path).toLowerCase();
       const contentType =
         {
@@ -44,25 +43,19 @@ if (process.env.NODE_ENV === "production") {
     }
   });
 } else {
-  // In development: use express.static as before
+  // In local dev: serve from ./uploads folder
   app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 }
 
-app.get("/", (_req, res) => res.send("Backend is working!"));
+// ✅ API routes
+app.get("/", (_req, res) => res.send("Backend is working! 🚀"));
 app.use("/auth", authRouter);
 app.use("/events", eventsRouter);
 app.use("/participants", participantsRouter);
 app.use("/admin", adminRouter);
 app.use("/users", userRouter);
-app.use("/uploads", uploadsRouter); // This handles POST /uploads
+app.use("/uploads", uploadsRouter); // POST /uploads
 app.use("/registrations", registrationsRouter);
 
-// 👉 Local development only (ignored on Vercel)
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
-}
-
+// ✅ Export Express app for Vercel serverless
 export default app;
