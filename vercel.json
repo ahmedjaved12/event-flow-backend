@@ -2,27 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/index.ts",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": ["prisma/schema.prisma"],
-        "maxDuration": 30
-      }
-    },
-    {
-      "src": "uploads/**",
-      "use": "@vercel/static"
+      "src": "src/index.ts",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/uploads/(.*)",
-      "dest": "/uploads/$1"
-    },
-    {
       "src": "/(.*)",
-      "dest": "api/index.ts"
+      "dest": "src/index.ts"
     }
-  ],
-  "installCommand": "npm install && npx prisma generate"
+  ]
 }
